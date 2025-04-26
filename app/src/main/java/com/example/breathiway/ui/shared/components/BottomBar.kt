@@ -1,9 +1,8 @@
-package com.example.breathiway.ui.navigation
+package com.example.breathiway.ui.shared.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -25,17 +24,9 @@ fun BottomBar() {
             selected = true,
             onClick = { /* TODO */ },
             icon = {
-                Icon(Icons.Default.Home, contentDescription = "홈")
+                Icon(Icons.Default.Place, contentDescription = "주변")
             },
-            label = { Text("홈") }
-        )
-        NavigationBarItem(
-            selected = false,
-            onClick = { /* TODO */ },
-            icon = {
-                Icon(Icons.Default.Menu, contentDescription = "지도")
-            },
-            label = { Text("지도") }
+            label = { Text("주변") }
         )
         NavigationBarItem(
             selected = false,
