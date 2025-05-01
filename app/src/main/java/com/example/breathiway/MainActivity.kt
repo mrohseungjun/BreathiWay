@@ -4,19 +4,26 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.breathiway.ui.location.LocationSheetContent
@@ -25,6 +32,8 @@ import com.example.breathiway.ui.map.WeatherData
 import com.example.breathiway.ui.shared.components.BottomBar
 import com.example.breathiway.ui.shared.components.BottomSheet
 import com.example.breathiway.ui.shared.components.TopBar
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,12 +52,19 @@ fun MainScreen() {
     val navHostController = rememberNavController()
     var isSearchActive by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
+    val sheetState = rememberStandardBottomSheetState(
+        initialValue = SheetValue.PartiallyExpanded,        // 초기 상태 설정
+        skipHiddenState = false                  // Hidden 상태 스킵 여부
+    )
 
-    val bottomSheetState = rememberBottomSheetScaffoldState()
-
+    val bottomSheetState = rememberBottomSheetScaffoldState(
+        bottomSheetState = sheetState,
+        snackbarHostState = remember { SnackbarHostState() }
+    )
     // 코루틴 스코프
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(true) }
+    var topBarHeightPx by remember { mutableIntStateOf(0) }
 
     val weatherData = remember {
         WeatherData(
@@ -92,18 +108,20 @@ fun MainScreen() {
         )
     }
 
+    LaunchedEffect(topBarHeightPx) {
+        // 실제 변수명에 맞게 bottomSheetState.bottomSheetState 사용
+        if (topBarHeightPx > 0) {
+            scope.launch {
+                // 이미 정의된 sheetState 직접 사용 (StandardBottomSheetState 타입)
+                sheetState.partialExpand() // 먼저 부분 확장
+                delay(100)
+                sheetState.expand() // 완전 확장
+            }
+        }
+    }
+
     MaterialTheme {
         Scaffold(
-            topBar = {
-                TopBar(
-                    weatherData = weatherData,
-                    isSearchActive = isSearchActive,
-                    searchQuery = searchQuery,
-                    onSearchToggle = { isSearchActive = !isSearchActive },
-                    onSearchQueryChange = { searchQuery = it },
-                    onClearSearch = { searchQuery = "" }
-                )
-            },
             bottomBar = {
                 BottomBar()
             },
@@ -111,7 +129,25 @@ fun MainScreen() {
         ) { _ ->
             if (showBottomSheet) {
                 BottomSheet(
-                    sheetState = bottomSheetState,
+                    sheetState = bottomSheetState, // 올바른 변수명 사용
+                    topBarHeightPx = topBarHeightPx,
+                    topBar = @Composable {
+                        // TopBar에는 modifier 파라미터가 없으므로 Box로 감싸서 높이 측정
+                        Box(
+                            modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
+                                topBarHeightPx = layoutCoordinates.size.height
+                            }
+                        ) {
+                            TopBar(
+                                weatherData = weatherData,
+                                isSearchActive = isSearchActive,
+                                searchQuery = searchQuery,
+                                onSearchToggle = { isSearchActive = !isSearchActive },
+                                onSearchQueryChange = { searchQuery = it },
+                                onClearSearch = { searchQuery = "" }
+                            )
+                        }
+                    },
                     sheetContent = {
                         LocationSheetContent(
                             weatherData = weatherData,
