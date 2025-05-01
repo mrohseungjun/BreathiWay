@@ -1,4 +1,4 @@
-package com.example.breathiway.ui.location
+package com.example.breathiway.ui.nearlyplacescreen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,15 +13,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -33,9 +30,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.breathiway.ui.map.HikingTrail
-import com.example.breathiway.ui.map.WeatherData
-import com.example.breathiway.ui.map.getAirQualityColor
+import com.example.breathiway.ui.shared.components.HikingTrail
+import com.example.breathiway.ui.shared.components.WeatherData
+import com.example.breathiway.ui.shared.components.getAirQualityColor
 
 @Composable
 fun LocationSheetContent(
@@ -109,24 +106,6 @@ fun LocationSheetContent(
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = onExpandSheet,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-            ) {
-                Text(
-                    text = "근처 산책로 보기",
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(vertical = 4.dp)
-                )
-            }
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -136,11 +115,10 @@ fun LocationSheetContent(
                     item {
                         Spacer(modifier = Modifier.height(24.dp))
                         Text(
-                            text = "추천 산책로",
+                            text = "산책로",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
                     }
                     items(hikingTrails) { trail ->
                         Card(

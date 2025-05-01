@@ -1,4 +1,4 @@
-package com.example.breathiway.ui.map
+package com.example.breathiway.ui.shared.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color

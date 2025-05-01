@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,8 +35,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.breathiway.ui.map.WeatherData
-import com.example.breathiway.ui.map.getAirQualityColor
 
 @Composable
 fun TopBar(
@@ -48,9 +47,12 @@ fun TopBar(
 ) {
     Surface(
         modifier = Modifier
+            .statusBarsPadding()
+            .padding(10.dp)
             .fillMaxWidth()
             .height(56.dp),
         shadowElevation = 4.dp,
+        shape = RoundedCornerShape(16.dp),
         color = MaterialTheme.colorScheme.surface
     ) {
         if (isSearchActive) {

@@ -1,5 +1,6 @@
 package com.example.breathiway.ui.shared.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -20,7 +21,8 @@ fun BottomSheet(
     sheetState: BottomSheetScaffoldState,
     sheetContent: @Composable () -> Unit,
     topBar: (@Composable () -> Unit)? = null,
-    topBarHeightPx: Int
+    topBarHeightPx: Int,
+    bottomHeightPx: Int
 ) {
     BottomSheetScaffold(
         topBar = {
@@ -29,7 +31,6 @@ fun BottomSheet(
             }
         },
         sheetContent = {
-            // TopBar 실제 높이 적용
             val config = LocalConfiguration.current
             val screenHeight = config.screenHeightDp.dp
             val density = LocalDensity.current
@@ -43,7 +44,7 @@ fun BottomSheet(
             }
         },
         scaffoldState = sheetState,
-        sheetPeekHeight = 160.dp,
+        sheetPeekHeight = bottomHeightPx.dp,
         sheetShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
         sheetContainerColor = MaterialTheme.colorScheme.surface,
         sheetShadowElevation = 8.dp,
