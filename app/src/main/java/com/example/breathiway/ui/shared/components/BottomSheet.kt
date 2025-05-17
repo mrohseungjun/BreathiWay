@@ -1,6 +1,5 @@
 package com.example.breathiway.ui.shared.components
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding

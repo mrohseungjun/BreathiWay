@@ -19,6 +19,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "NAVER_MAP_CLIENT_ID", "\"${project.properties["NAVER_MAP_CLIENT_ID"] as? String ?: ""}\"")
+
+        // 네이버 지도 API 클라이언트 ID 설정 (실제 발급받은 ID로 변경 필요)
+        manifestPlaceholders["NAVER_CLIENT_ID"] = project.properties["NAVER_MAP_CLIENT_ID"] ?: ""
     }
 
     buildTypes {
@@ -38,6 +42,7 @@ android {
         jvmTarget = "11"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 }
@@ -71,4 +76,7 @@ dependencies {
     implementation(libs.android.hilt)
     ksp(libs.android.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
+    
+    // 네이버 지도 SDK
+    implementation("com.naver.maps:map-sdk:3.21.0")
 }
